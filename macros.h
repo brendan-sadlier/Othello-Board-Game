@@ -6,3 +6,20 @@
  * Copyright (c) - 2021 Brendan Sadlier
  * All Rights Reserved
  */
+#ifndef MACROS
+#define MACROS
+
+#define BLACK     0
+#define WHITE     1
+#define EMPTY     2
+#define PLAYABLE  3
+
+#define BLACK_MARKER     "B"
+#define WHITE_MARKER     "W"
+#define EMPTY_MARKER     " "
+#define PLAYABLE_MARKER  "."
+
+#define TRUE   1
+#define FALSE  0
+
+#endif //MACROS
