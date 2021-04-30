@@ -20,11 +20,34 @@ extern int score[PLAYERS];
 extern int currentPlayer;
 extern int illegalMove;
 
+// Opening Message at Program Start
+void openingMessage () {
+
+    printf(COLOR_GREEN_BOLD);
+    printf("+---------------------------------+\n");
+    printf("|             OTHELLO             |\n");
+    printf("+---------------------------------+\n");
+    printf(COLOR_RESET);
+
+    printf(COLOR_BLUE_BOLD);
+    printf("\n<------- ENTER PLAYER NAME ------->\n");
+    printf(COLOR_RESET);
+
+    printf(COLOR_CYAN_BOLD "PLAYER 1 > " COLOR_RESET);
+    scanf(" %s", playerName[BLACK]);
+
+    printf(COLOR_CYAN_BOLD "PLAYER 2 > " COLOR_RESET);
+    scanf(" %s", playerName[WHITE]);
+
+    printf("\n%s is BLACK (B)\n", playerName[BLACK]);
+    printf("%s is WHITE (W)\n\n", playerName[WHITE]);
+}
+
 // Function to Display Current Score of Game
 void scoreBoard () {
 
     printf(COLOR_BLUE_BOLD);
-    printf("<--- %7s  %2d : %2d %s --->", playerName[BLACK], score[BLACK], score[WHITE], playerName[WHITE]);
+    printf("\n  <--- %-7s %2d : %-2d %s --->\n", playerName[BLACK], score[BLACK], score[WHITE], playerName[WHITE]);
     printf(COLOR_RESET);
 }
 

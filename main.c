@@ -24,6 +24,7 @@ int main () {
 
     system("clear"); // Clears Console of All Previous Text
 
+    openingMessage();
     startGame(); // Sets Initial Game Settings
 
     while (!gameEnd) {
