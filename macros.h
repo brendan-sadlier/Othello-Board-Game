@@ -9,6 +9,11 @@
 #ifndef MACROS
 #define MACROS
 
+#define MAX_STR_LEN  124
+#define ROWS          8
+#define COLUMNS       8
+#define PLAYERS       2 
+
 #define BLACK     0
 #define WHITE     1
 #define EMPTY     2
