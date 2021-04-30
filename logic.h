@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "color.h"
+
 // Global Variables created in logic.h
 char board[ROWS][COLUMNS];        // Char Array to Store Board Values
 int validPath[ROWS][COLUMNS][8];  // Integer Array To Store Valid Paths in All Directions on Board
@@ -95,7 +97,7 @@ int checkPlayable (int i, int j) {
 
     // IF Position Input is Valid & The Distance Is Valid & The Inputted Position is Held By The Current Player
     if (validPositionInput(x, y) && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
-        validPath[i][j][6] = 1; // Validate Path to be PLAYABLE
+        validPath[i][j][0] = 1; // Validate Path to be PLAYABLE
         playable = TRUE; // Set PLAYABLE to TRUE
     }
 
@@ -119,7 +121,7 @@ int checkPlayable (int i, int j) {
     }
 
     if (validPositionInput(x, y) && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
-        validPath[i][j][3] = 1;
+        validPath[i][j][2] = 1;
         playable = TRUE;
     }
 
@@ -132,7 +134,7 @@ int checkPlayable (int i, int j) {
     }
 
     if (validPositionInput(x, y)  && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
-        validPath[i][j][0] = 1;
+        validPath[i][j][3] = 1;
         playable = TRUE;
     }
 
@@ -145,7 +147,7 @@ int checkPlayable (int i, int j) {
     }
 
     if (validPositionInput(x, y) && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
-        validPath[i][j][5] = 1;
+        validPath[i][j][4] = 1;
         playable = TRUE;
     }
 
@@ -157,7 +159,7 @@ int checkPlayable (int i, int j) {
     }
 
     if (validPositionInput(x, y) && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
-        validPath[i][j][4] = 1;
+        validPath[i][j][5] = 1;
         playable = TRUE;
     }
 
@@ -170,7 +172,7 @@ int checkPlayable (int i, int j) {
     }
     
     if (validPositionInput(x, y) && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
-        validPath[i][j][2] = 1;
+        validPath[i][j][6] = 1;
         playable = TRUE;
     }
 
@@ -189,4 +191,212 @@ int checkPlayable (int i, int j) {
     }
 
     return playable;
+}
+
+// Sets Board Array Position to PLAYABLE Integer if Position is PLAYABLE
+void setPlayablePositions () {
+
+    int i, j;
+
+    legalMove = FALSE;
+    
+    for (i = 0; i < ROWS; ++i) {
+
+        for (j = 0; j < COLUMNS; ++j) {
+
+            if (board[i][j] == PLAYABLE) {
+                board[i][j] = EMPTY;
+            }
+
+            if (checkPlayable(i, j)) {
+                board[i][j] = PLAYABLE;
+                legalMove = TRUE; // Set Legal Move to Be True
+            }
+        }
+    }
+}
+
+// Changes Current Player to Other Player
+void changeCurrentPlayer () {
+
+    currentPlayer = (currentPlayer + 1) % 2;
+
+}
+
+// Prompt User To Input Position on Board and store In Pointer
+void positionInput (int * rowPtr, char * columnPtr) {
+
+    printf(COLOR_YELLOW "Enter Board Position (i.e. D4) > " COLOR_RESET);
+    scanf(" %c%d", columnPtr, rowPtr); // Store User Inputted Position
+}
+
+// Sets All Squares Along Shortest Path To Inputted Position to Current Players Integer Value
+void takeSquares (int i, int j) {
+
+    int opponent = (currentPlayer + 1) % 2;
+    int x, y;
+
+    // TAKE LOWER PATH
+    if (validPath[i][j][0]) {
+
+        x = i + 1, y = j;
+        
+        while (board[x][y] == opponent) {
+            board[x][y] = currentPlayer;
+            score[currentPlayer]++;
+            score[opponent]--;
+            x += 1;
+        }
+    }
+
+    // TAKE TOP PATH
+    if (validPath[i][j][1])
+    {
+        x = i - 1, y = j;
+
+        while (board[x][y] == opponent) {
+            board[x][y] = currentPlayer;
+            score[currentPlayer]++;
+            score[opponent]--;
+            x -= 1;
+        }
+    }
+
+    // TAKE LEFT PATH
+    if (validPath[i][j][2]) {
+        
+        x = i, y = j - 1;
+        
+        while (board[x][y] == opponent) {
+            board[x][y] = currentPlayer;
+            score[currentPlayer]++;
+            score[opponent]--;
+            y -= 1;
+        }
+    }
+
+    // TAKE TOP LEFT PATH
+    if (validPath[i][j][3]) {
+        
+        x = i - 1, y = j-1;
+
+        while (board[x][y] == opponent) {
+            board[x][y] = currentPlayer;
+            score[currentPlayer]++;
+            score[opponent]--;
+            x -= 1;
+            y -= 1;
+        }
+    }
+
+    // TAKE LOWER LEFT PATH
+    if (validPath[i][j][4]) {
+
+        x = i + 1, y = j - 1;
+        
+        while (board[x][y] == opponent) {
+            board[x][y] = currentPlayer;
+            score[currentPlayer]++;
+            score[opponent]--;
+            x += 1;
+            y -= 1;
+        }
+    }
+
+    // TAKE RIGHT PATH
+    if (validPath[i][j][5]) {
+        
+        x = i, y = j + 1;
+
+        while (board[x][y] == opponent) {
+            board[x][y] = currentPlayer;
+            score[currentPlayer]++;
+            score[opponent]--;
+            y += 1;
+        }
+    }
+    
+    // TAKE TOP RIGHT PATH
+    if (validPath[i][j][6]) {
+
+        x = i - 1, y = j - 1;
+        
+        while (board[x][y] == opponent) {
+            board[x][y] = currentPlayer;
+            score[currentPlayer]++;
+            score[opponent]--;
+            x -= 1;
+            y += 1;
+        }
+    }
+
+    // TAKE LOWER RIGHT PATH
+    if (validPath[i][j][7]) {
+        
+        x = i + 1, y = j + 1;
+
+        while (board[x][y] == opponent) {
+            board[x][y] = currentPlayer;
+            score[currentPlayer]++;
+            score[opponent]--;
+            x += 1;
+            y += 1;
+        }
+    }
+}
+
+// Converts User Inputted CHAR Column Value to Integer Array Index Value 
+void columnToIndex (char column) {
+
+    switch (column) {
+        
+        case 'A':
+            columnIndex = 0;
+            break;
+        case 'B':
+            columnIndex = 1;
+            break;
+        case 'C':
+            columnIndex = 2;
+            break;
+        case 'D':
+            columnIndex = 3;
+            break;
+        case 'E':
+            columnIndex = 4;
+            break;
+        case 'F':
+            columnIndex = 5;
+            break;
+        case 'G':
+            columnIndex = 6;
+            break; 
+        case 'H':
+            columnIndex = 7;
+            break;
+        default:
+            break;
+    }
+}
+
+void makeMove () {
+
+    int row;
+    char column;
+
+    positionInput(&row, &column);
+    columnToIndex(column);
+    rowIndex = row - 1; // Converted Inputted Row Value to Row Index Value in Array
+
+    // IF Inputted Position is VALID and Position on Board is PLAYABLE
+    if (validPositionInput(rowIndex, columnIndex) && board[rowIndex][columnIndex] == PLAYABLE) {
+        board[rowIndex][columnIndex] = currentPlayer; // Set Position in Board to Hold Current Player Integer Value
+        score[currentPlayer]++; // Increase Current Player's score by 1
+        takeSquares(rowIndex, columnIndex); // Take All Squares Along The Path to Inputted Position
+        changeCurrentPlayer(); // Swap Current Player
+    }
+
+    else {
+        illegalMove = TRUE; // ELSE Trigger Illegal Move Message
+    }
 }
