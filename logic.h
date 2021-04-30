@@ -27,8 +27,8 @@ void startGame () {
 
     memset(board, EMPTY, sizeof(board));  // Allocate Memory Needed for the Board Array
 
-    board[3][3] = board[4][4] = BLACK;  // Set Starting Positions for BLACK Tile
-    board[3][4] = board[4][3] = WHITE;  // Set Starting Positions for WHITE Tile
+    board[3][3] = board[4][4] = WHITE;  // Set Starting Positions for WHITE Tile
+    board[3][4] = board[4][3] = BLACK;  // Set Starting Positions for BLACK Tile
 
     score[BLACK] = 2;  // Set BLACK Score to 2 
     score[WHITE] = 2;  // Set WHITE Score to 2
