@@ -87,18 +87,17 @@ int checkPlayable (int i, int j) {
 
     /* * VALIDATING DIRECTION PATHS * */
 
-    // VALIDATE LOWER PATH
-    x = i+1, y = j;
+    // VALIDATE TOP LEFT PATH
+    x = i - 1, y = j - 1;
 
-    // WHILE Position Input is Valid and The Inputted Position is held by Opposing Player 
     while (validPositionInput(x, y) && board[x][y] == opponent) {
-        x += 1; //Increase X (ROW) Value by 1
+        x -= 1;
+        y -= 1;
     }
 
-    // IF Position Input is Valid & The Distance Is Valid & The Inputted Position is Held By The Current Player
-    if (validPositionInput(x, y) && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
-        validPath[i][j][0] = 1; // Validate Path to be PLAYABLE
-        playable = TRUE; // Set PLAYABLE to TRUE
+    if (validPositionInput(x, y)  && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
+        validPath[i][j][0] = 1;
+        playable = TRUE;
     }
 
     // VALIDATE TOP PATH
@@ -113,6 +112,19 @@ int checkPlayable (int i, int j) {
         playable = TRUE;
     }
     
+    // VALIDATE TOP RIGHT PATH
+    x = i - 1, y = j + 1;
+    
+    while (validPositionInput(x, y) && board[x][y] == opponent) {
+        x -= 1;
+        y += 1;
+    }
+    
+    if (validPositionInput(x, y) && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
+        validPath[i][j][2] = 1;
+        playable = TRUE;
+    }
+
     // VALIDATE LEFT PATH
     x = i, y = j - 1;
 
@@ -121,20 +133,19 @@ int checkPlayable (int i, int j) {
     }
 
     if (validPositionInput(x, y) && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
-        validPath[i][j][2] = 1;
+        validPath[i][j][3] = 1;
         playable = TRUE;
     }
 
-    // VALIDATE TOP LEFT PATH
-    x = i -1, y = j - 1;
+    // VALIDATE RIGHT PATH
+    x = i, y = j+1;
 
     while (validPositionInput(x, y) && board[x][y] == opponent) {
-        x -= 1;
-        y -= 1;
+        y += 1;
     }
 
-    if (validPositionInput(x, y)  && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
-        validPath[i][j][3] = 1;
+    if (validPositionInput(x, y) && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
+        validPath[i][j][4] = 1;
         playable = TRUE;
     }
 
@@ -147,36 +158,24 @@ int checkPlayable (int i, int j) {
     }
 
     if (validPositionInput(x, y) && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
-        validPath[i][j][4] = 1;
-        playable = TRUE;
-    }
-
-    // VALIDATE RIGHT PATH
-    x = i, y = j+1;
-
-    while (validPositionInput(x, y) && board[x][y] == opponent) {
-        y += 1;
-    }
-
-    if (validPositionInput(x, y) && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
         validPath[i][j][5] = 1;
         playable = TRUE;
     }
 
-    // VALIDATE TOP RIGHT PATH
-    x = i - 1, y = j + 1;
-    
+    // VALIDATE LOWER PATH
+    x = i+1, y = j;
+
+    // WHILE Position Input is Valid and The Inputted Position is held by Opposing Player 
     while (validPositionInput(x, y) && board[x][y] == opponent) {
-        x -= 1;
-        y += 1;
-    }
-    
-    if (validPositionInput(x, y) && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
-        validPath[i][j][6] = 1;
-        playable = TRUE;
+        x += 1; //Increase X (ROW) Value by 1
     }
 
-    
+    // IF Position Input is Valid & The Distance Is Valid & The Inputted Position is Held By The Current Player
+    if (validPositionInput(x, y) && distance(i, j, x, y) > 1 && board[x][y] == currentPlayer) {
+        validPath[i][j][6] = 1; // Validate Path to be PLAYABLE
+        playable = TRUE; // Set PLAYABLE to TRUE
+    }
+  
     // VALIDATE LOWER RIGHT PATH
     x = i+1, y = j+1;
 
@@ -226,7 +225,7 @@ void changeCurrentPlayer () {
 // Prompt User To Input Position on Board and store In Pointer
 void positionInput (int * rowPtr, char * columnPtr) {
 
-    printf(COLOR_YELLOW "Enter Board Position (i.e. D4) > " COLOR_RESET);
+    printf(COLOR_YELLOW "Enter Position (i.e. D4) > " COLOR_RESET);
     scanf(" %c%d", columnPtr, rowPtr); // Store User Inputted Position
 }
 
@@ -236,16 +235,17 @@ void takeSquares (int i, int j) {
     int opponent = (currentPlayer + 1) % 2;
     int x, y;
 
-    // TAKE LOWER PATH
+    // TAKE TOP LEFT PATH
     if (validPath[i][j][0]) {
 
-        x = i + 1, y = j;
+        x = i - 1, y = j - 1;
         
         while (board[x][y] == opponent) {
             board[x][y] = currentPlayer;
             score[currentPlayer]++;
             score[opponent]--;
-            x += 1;
+            x -= 1;
+            y -= 1;
         }
     }
 
@@ -262,38 +262,51 @@ void takeSquares (int i, int j) {
         }
     }
 
-    // TAKE LEFT PATH
+    // TAKE TOP RIGHT PATH
     if (validPath[i][j][2]) {
         
-        x = i, y = j - 1;
+        x = i - 1, y = j + 1;
         
-        while (board[x][y] == opponent) {
-            board[x][y] = currentPlayer;
-            score[currentPlayer]++;
-            score[opponent]--;
-            y -= 1;
-        }
-    }
-
-    // TAKE TOP LEFT PATH
-    if (validPath[i][j][3]) {
-        
-        x = i - 1, y = j-1;
-
         while (board[x][y] == opponent) {
             board[x][y] = currentPlayer;
             score[currentPlayer]++;
             score[opponent]--;
             x -= 1;
+            y += 1;
+        }
+    }
+
+    // TAKE LEFT PATH
+    if (validPath[i][j][3]) {
+        
+        x = i, y = j - 1;
+
+        while (board[x][y] == opponent) {
+            board[x][y] = currentPlayer;
+            score[currentPlayer]++;
+            score[opponent]--;
             y -= 1;
         }
     }
 
-    // TAKE LOWER LEFT PATH
+    // TAKE RIGHT PATH
     if (validPath[i][j][4]) {
 
-        x = i + 1, y = j - 1;
+        x = i, y = j + 1;
         
+        while (board[x][y] == opponent) {
+            board[x][y] = currentPlayer;
+            score[currentPlayer]++;
+            score[opponent]--;
+            y += 1;
+        }
+    }
+
+    // TAKE LOWER LEFT PATH
+    if (validPath[i][j][5]) {
+        
+        x = i + 1, y = j - 1;
+
         while (board[x][y] == opponent) {
             board[x][y] = currentPlayer;
             score[currentPlayer]++;
@@ -302,31 +315,17 @@ void takeSquares (int i, int j) {
             y -= 1;
         }
     }
-
-    // TAKE RIGHT PATH
-    if (validPath[i][j][5]) {
-        
-        x = i, y = j + 1;
-
-        while (board[x][y] == opponent) {
-            board[x][y] = currentPlayer;
-            score[currentPlayer]++;
-            score[opponent]--;
-            y += 1;
-        }
-    }
     
-    // TAKE TOP RIGHT PATH
+    // TAKE LOWER PATH
     if (validPath[i][j][6]) {
 
-        x = i - 1, y = j - 1;
+        x = i + 1, y = j;
         
         while (board[x][y] == opponent) {
             board[x][y] = currentPlayer;
             score[currentPlayer]++;
             score[opponent]--;
-            x -= 1;
-            y += 1;
+            x += 1;
         }
     }
 
