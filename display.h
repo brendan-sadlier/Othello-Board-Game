@@ -8,8 +8,10 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "color.h"
+#include "macros.h"
 
 // Global Variables Created In display.h
 char playerName[PLAYERS][MAX_STR_LEN]; //String Array to Store Player Names
@@ -136,5 +138,32 @@ void winnerMessage () {
     else {
 
         printf(COLOR_YELLOW_BOLD "DRAW GAME...\n" COLOR_RESET);
+    }
+}
+
+void writeScoreToFile () {
+
+    FILE * writePtr;
+    time_t currentTime;
+
+    time(&currentTime);
+
+    writePtr = fopen("results.txt", "a");
+
+    fprintf(writePtr, "Time of Game: %s", ctime(&currentTime));
+    fprintf(writePtr, "%s  %d : %d  %s\n", playerName[BLACK], score[BLACK], score[WHITE], playerName[WHITE]);
+    
+    if (score[BLACK] > score[WHITE]) {
+
+        fprintf(writePtr, "WINNER: %s\n\n", playerName[BLACK]);
+    }
+
+    else if (score[WHITE] > score[BLACK]) {
+
+        fprintf(writePtr, "WINNER: %s\n\n", playerName[WHITE]);
+    }
+
+    else {
+        fprintf(writePtr, "DRAW GAME!\n\n");
     }
 }
