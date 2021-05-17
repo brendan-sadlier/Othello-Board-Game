@@ -7,6 +7,7 @@
  * All Rights Reserved
  */
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "macros.h"
 #include "logic.h"
@@ -16,7 +17,7 @@
 int gameEnd = FALSE; // Returns TRUE if Game has Ended
 int skipTurn = FALSE; // Returns TRUE if a Turn has been Skipped
 
-//Global Variables Created in logic.h
+// Global Variables Created in logic.h
 extern int illegalMove;
 extern int legalMove;
 
@@ -54,4 +55,5 @@ int main () {
     }
 
     winnerMessage();
+    writeScoreToFile();
 }
